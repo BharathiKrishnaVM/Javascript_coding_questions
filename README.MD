@@ -154,7 +154,7 @@ Spread Operator: Creates a shallow clone.
 Deep Clone: Creates a complete copy of the object, including nested objects.
 JSON Methods: Convert the object to a JSON string and then parse it back to an object.
 
-##Flattening of an object
+***Flattening of an object***
 Flattening a nested object means converting it into a single-level object where the keys represent the path to the original nested values. Here's a function to flatten a nested object in JavaScript:
 
 Example Implementation
@@ -205,25 +205,416 @@ Output:
 ```
 
 Explanation
+1. Function Definition:
+   The flattenObject function takes three parameters:
+   obj: The object to be flattened.
+   parentKey: The key of the parent object, used to build the path for nested keys.
+   result: The resulting flattened object.
+2. Iterate Over Object Keys:
+   The function iterates over the keys of the object using a for...in loop.
+   It checks if the key is a direct property of the object using hasOwnProperty.
+3. Build New Key:
+   The new key is built by concatenating the parentKey and the current key with a dot (.) separator.
+   Recursive Call for Nested Objects:
+   If the value of the current key is an object (and not an array), the function calls itself recursively to flatten the nested object.
+4. Assign Value to Result:
+   If the value is not an object, it assigns the value to the result object using the new key.
+5. Return Result:
+   The function returns the flattened object.
+
+
+
+# From a String word count the occurences of characters and return in an object
+
+To count the occurrences of each character in a string and return the result as an object, you can create a function that iterates over the string and keeps track of the count of each character. Here's how you can do it:
+
+Example Implementation
+```javascript
+function countCharacterOccurrences(str) {
+  const result = {};
+
+  for (let char of str) {
+    if (result[char]) {
+      result[char]++;
+    } else {
+      result[char] = 1;
+    }
+  }
+
+   // Sort the result object by keys
+  const sortedResult = {};
+  Object.keys(result).sort().forEach(key => {
+    sortedResult[key] = result[key];
+  });
+
+  return result;
+}
+
+// Example usage
+const inputString = "hello world";
+const characterCounts = countCharacterOccurrences(inputString);
+console.log(characterCounts);
+/*
+Output:
+{
+  h: 1,
+  e: 1,
+  l: 3,
+  o: 2,
+  ' ': 1,
+  w: 1,
+  r: 1,
+  d: 1
+}
+*/
+```
+Explanation
 Function Definition:
 
-The flattenObject function takes three parameters:
-obj: The object to be flattened.
-parentKey: The key of the parent object, used to build the path for nested keys.
-result: The resulting flattened object.
-Iterate Over Object Keys:
+The countCharacterOccurrences function takes a single parameter str, which is the input string.
+Initialize Result Object:
 
-The function iterates over the keys of the object using a for...in loop.
-It checks if the key is a direct property of the object using hasOwnProperty.
-Build New Key:
+An empty object result is initialized to store the character counts.
+Iterate Over String:
 
-The new key is built by concatenating the parentKey and the current key with a dot (.) separator.
-Recursive Call for Nested Objects:
+The function uses a for...of loop to iterate over each character in the string.
+Update Character Count:
 
-If the value of the current key is an object (and not an array), the function calls itself recursively to flatten the nested object.
-Assign Value to Result:
-
-If the value is not an object, it assigns the value to the result object using the new key.
+For each character, the function checks if the character is already a key in the result object.
+If the character is already a key, its value (count) is incremented by 1.
+If the character is not a key, it is added to the result object with a value (count) of 1.
 Return Result:
 
-The function returns the flattened object.
+The function returns the result object containing the character counts.
+Using BubbleSort: Sort the object 
+```javascript
+function countCharacterOccurrences(str) {
+  const result = {};
+
+  for (let char of str) {
+    if (result[char]) {
+      result[char]++;
+    } else {
+      result[char] = 1;
+    }
+  }
+
+  // Get the keys of the result object
+  const keys = Object.keys(result);
+
+  // Bubble sort algorithm to sort the keys
+  for (let i = 0; i < keys.length; i++) {
+    for (let j = 0; j < keys.length - i - 1; j++) {
+      if (keys[j] > keys[j + 1]) {
+        // Swap keys[j] and keys[j + 1]
+        const temp = keys[j];
+        keys[j] = keys[j + 1];
+        keys[j + 1] = temp;
+      }
+    }
+  }
+
+  // Create a new sorted result object
+  const sortedResult = {};
+  for (let key of keys) {
+    sortedResult[key] = result[key];
+  }
+
+  return sortedResult;
+}
+
+// Example usage
+const inputString = "hello world";
+const characterCounts = countCharacterOccurrences(inputString);
+console.log(characterCounts);
+/*
+Output:
+{
+  ' ': 1,
+  d: 1,
+  e: 1,
+  h: 1,
+  l: 3,
+  o: 2,
+  r: 1,
+  w: 1
+}
+*/
+```
+Using REDUCE METHOD:
+
+```javascript
+function countCharacterOccurrences(str) {
+  const result = {};
+
+  for (let char of str) {
+    if (result[char]) {
+      result[char]++;
+    } else {
+        result[char] = 1;
+    }
+  }
+
+  // Convert the object to an array of key-value pairs
+  const entries = Object.entries(result);
+
+  // Sort the array by keys
+  const sortedEntries = entries.sort((a, b) => a[0].localeCompare(b[0]));
+
+  // Use reduce to reconstruct the sorted object
+  const sortedResult = sortedEntries.reduce((acc, [key, value]) => {
+    acc[key] = value;
+    return acc;
+  }, {});
+
+  return sortedResult;
+}
+
+// Example usage
+const inputString = "hello world";
+const characterCounts = countCharacterOccurrences(inputString);
+console.log(characterCounts);
+/*
+Output:
+{
+  ' ': 1,
+  d: 1,
+  e: 1,
+  h: 1,
+  l: 3,
+  o: 2,
+  r: 1,
+  w: 1
+}
+*/
+```
+
+# SORTING 
+```javascript
+***SORT AN ARRAY***
+function bubbleSort(arr) {
+  let n = arr.length;
+  let swapped;
+
+  do {
+    swapped = false;
+    for (let i = 0; i < n - 1; i++) {
+      if (arr[i] > arr[i + 1]) {
+        // Swap arr[i] and arr[i + 1]
+        let temp = arr[i];
+        arr[i] = arr[i + 1];
+        arr[i + 1] = temp;
+        swapped = true;
+      }
+    }
+    n--; // Reduce the range of comparison
+  } while (swapped);
+
+  return arr;
+}
+
+// Example usage
+const numbers = [5, 3, 8, 1, 2];
+const sortedNumbers = bubbleSort(numbers);
+
+console.log(sortedNumbers); // Output: [1, 2, 3, 5, 8]
+
+***SORT AN OBJECT***
+
+```javascript
+ // Get the keys of the result object
+  const keys = Object.keys(result);
+
+  // Bubble sort algorithm to sort the keys
+  for (let i = 0; i < keys.length; i++) {
+    for (let j = 0; j < keys.length - i - 1; j++) {
+      if (keys[j] > keys[j + 1]) {
+        // Swap keys[j] and keys[j + 1]
+        const temp = keys[j];
+        keys[j] = keys[j + 1];
+        keys[j + 1] = temp;
+      }
+    }
+  }
+
+  // Create a new sorted result object
+  const sortedResult = {};
+  for (let key of keys) {
+    sortedResult[key] = result[key];
+  }
+
+  return sortedResult;
+```
+# BubbleSort the array of string
+```javascript
+function bubbleSortStrings(arr) {
+  let n = arr.length;
+  let swapped;
+
+  do {
+    swapped = false;
+    for (let i = 0; i < n - 1; i++) {
+      if (arr[i].localeCompare(arr[i + 1]) > 0) {
+        // Swap arr[i] and arr[i + 1]
+        let temp = arr[i];
+        arr[i] = arr[i + 1];
+        arr[i + 1] = temp;
+        swapped = true;
+      }
+    }
+    n--; // Reduce the range of comparison
+  } while (swapped);
+
+  return arr;
+}
+
+// Example usage
+const fruits = ['banana', 'apple', 'cherry', 'date'];
+const sortedFruits = bubbleSortStrings(fruits);
+
+console.log(sortedFruits); // Output: ['apple', 'banana', 'cherry', 'date'];
+```
+
+#SELECTION SORT
+1. Selection Sort
+Selection sort is an in-place comparison sorting algorithm. It divides the input list into two parts: the sublist of items already sorted, which is built up from left to right at the front (left) of the list, and the sublist of items remaining to be sorted that occupy the rest of the list. Initially, the sorted sublist is empty, and the unsorted sublist is the entire input list. The algorithm proceeds by finding the smallest (or largest, depending on the sorting order) element in the unsorted sublist, swapping it with the leftmost unsorted element (putting it in sorted order), and moving the sublist boundaries one element to the right.
+
+Example: Selection Sort Algorithm for Strings
+```javascript
+function selectionSortStrings(arr) {
+  let n = arr.length;
+
+  for (let i = 0; i < n - 1; i++) {
+    let minIndex = i;
+    for (let j = i + 1; j < n; j++) {
+      if (arr[j].localeCompare(arr[minIndex]) < 0) {
+        minIndex = j;
+      }
+    }
+    if (minIndex !== i) {
+      let temp = arr[i];
+      arr[i] = arr[minIndex];
+      arr[minIndex] = temp;
+    }
+  }
+
+  return arr;
+}
+
+// Example usage
+const fruits = ['banana', 'apple', 'cherry', 'date'];
+const sortedFruits = selectionSortStrings(fruits);
+
+console.log(sortedFruits); // Output: ['apple', 'banana', 'cherry', 'date']
+```
+2. Insertion Sort
+Insertion sort is a simple sorting algorithm that builds the final sorted array one item at a time. It is much less efficient on large lists than more advanced algorithms such as quicksort, heapsort, or merge sort. However, insertion sort provides several advantages:
+
+Simple implementation
+Efficient for (quite) small data sets
+More efficient in practice than most other simple quadratic (i.e., O(n^2)) algorithms such as selection sort or bubble sort
+Adaptive: efficient for data sets that are already substantially sorted
+Example: Insertion Sort Algorithm for Strings
+```javascript
+function insertionSortStrings(arr) {
+  let n = arr.length;
+
+  for (let i = 1; i < n; i++) {
+    let key = arr[i];
+    let j = i - 1;
+
+    while (j >= 0 && arr[j].localeCompare(key) > 0) {
+      arr[j + 1] = arr[j];
+      j = j - 1;
+    }
+    arr[j + 1] = key;
+  }
+
+  return arr;
+}
+
+// Example usage
+const fruits = ['banana', 'apple', 'cherry', 'date'];
+const sortedFruits = insertionSortStrings(fruits);
+
+console.log(sortedFruits); // Output: ['apple', 'banana', 'cherry', 'date']
+```
+3. Merge Sort
+Merge sort is an efficient, stable, comparison-based, divide and conquer sorting algorithm. Most implementations produce a stable sort, meaning that the order of equal elements is the same in the input and output. Merge sort is a divide and conquer algorithm that was invented by John von Neumann in 1945.
+
+Example: Merge Sort Algorithm for Strings
+```javascript
+function mergeSortStrings(arr) {
+  if (arr.length <= 1) {
+    return arr;
+  }
+
+  const mid = Math.floor(arr.length / 2);
+  const left = arr.slice(0, mid);
+  const right = arr.slice(mid);
+
+  return merge(mergeSortStrings(left), mergeSortStrings(right));
+}
+
+function merge(left, right) {
+  let result = [];
+  let leftIndex = 0;
+  let rightIndex = 0;
+
+  while (leftIndex < left.length && rightIndex < right.length) {
+    if (left[leftIndex].localeCompare(right[rightIndex]) < 0) {
+      result.push(left[leftIndex]);
+      leftIndex++;
+    } else {
+      result.push(right[rightIndex]);
+      rightIndex++;
+    }
+  }
+
+  return result.concat(left.slice(leftIndex)).concat(right.slice(rightIndex));
+}
+
+// Example usage
+const fruits = ['banana', 'apple', 'cherry', 'date'];
+const sortedFruits = mergeSortStrings(fruits);
+
+console.log(sortedFruits); // Output: ['apple', 'banana', 'cherry', 'date']
+```
+4. Quick Sort
+Quicksort is an efficient, in-place, comparison-based, divide and conquer sorting algorithm. Developed by Tony Hoare in 1959, it is still a commonly used algorithm for sorting. Quicksort is faster in practice than other O(n log n) algorithms such as merge sort and heapsort.
+
+Example: Quick Sort Algorithm for Strings
+```javascript
+function quickSortStrings(arr) {
+  if (arr.length <= 1) {
+    return arr;
+  }
+
+  const pivot = arr[arr.length - 1];
+  const left = [];
+  const right = [];
+
+  for (let i = 0; i < arr.length - 1; i++) {
+    if (arr[i].localeCompare(pivot) < 0) {
+      left.push(arr[i]);
+    } else {
+      right.push(arr[i]);
+    }
+  }
+
+  return [...quickSortStrings(left), pivot, ...quickSortStrings(right)];
+}
+
+// Example usage
+const fruits = ['banana', 'apple', 'cherry', 'date'];
+const sortedFruits = quickSortStrings(fruits);
+
+console.log(sortedFruits); // Output: ['apple', 'banana', 'cherry', 'date']
+```
+Summary
+These examples cover various sorting algorithms that can be used to sort an array of strings without using the built-in sort method. Each algorithm has its own advantages and use cases:
+Selection Sort: Simple and easy to understand, but not efficient for large arrays.
+Insertion Sort: Efficient for small or nearly sorted arrays.
+Merge Sort: Efficient and stable, with a time complexity of O(n log n).
+Quick Sort: Efficient and widely used, with an average time complexity of O(n log n).
+Understanding these sorting algorithms and their implementations can help you choose the right one for your specific use case and improve your problem-solving skills in JavaScript.
