@@ -64,7 +64,7 @@ Deleting Properties: Use the delete operator to remove a property from an object
 4. Iterating Over Properties
 
 Example:
-```java
+```javascript
 const person = {
   name: 'John',
   age: 30,
@@ -153,3 +153,77 @@ Object.assign(): Creates a shallow clone.
 Spread Operator: Creates a shallow clone.
 Deep Clone: Creates a complete copy of the object, including nested objects.
 JSON Methods: Convert the object to a JSON string and then parse it back to an object.
+
+##Flattening of an object
+Flattening a nested object means converting it into a single-level object where the keys represent the path to the original nested values. Here's a function to flatten a nested object in JavaScript:
+
+Example Implementation
+```javascript
+function flattenObject(obj, parentKey = '', result = {}) {
+  for (let key in obj) {
+    if (obj.hasOwnProperty(key)) {
+      const newKey = parentKey ? `${parentKey}.${key}` : key;
+      if (typeof obj[key] === 'object' && obj[key] !== null && !Array.isArray(obj[key])) {
+        flattenObject(obj[key], newKey, result);
+      } else {
+        result[newKey] = obj[key];
+      }
+    }
+  }
+  return result;
+}
+
+// Example usage
+const nestedObject = {
+  name: 'John',
+  address: {
+    city: 'New York',
+    zip: {
+      code: 10001,
+      plus4: 1234
+    }
+  },
+  contact: {
+    phone: '123-456-7890',
+    email: 'john@example.com'
+  }
+};
+
+const flattenedObject = flattenObject(nestedObject);
+console.log(flattenedObject);
+/*
+Output:
+{
+  'name': 'John',
+  'address.city': 'New York',
+  'address.zip.code': 10001,
+  'address.zip.plus4': 1234,
+  'contact.phone': '123-456-7890',
+  'contact.email': 'john@example.com'
+}
+*/
+```
+
+Explanation
+Function Definition:
+
+The flattenObject function takes three parameters:
+obj: The object to be flattened.
+parentKey: The key of the parent object, used to build the path for nested keys.
+result: The resulting flattened object.
+Iterate Over Object Keys:
+
+The function iterates over the keys of the object using a for...in loop.
+It checks if the key is a direct property of the object using hasOwnProperty.
+Build New Key:
+
+The new key is built by concatenating the parentKey and the current key with a dot (.) separator.
+Recursive Call for Nested Objects:
+
+If the value of the current key is an object (and not an array), the function calls itself recursively to flatten the nested object.
+Assign Value to Result:
+
+If the value is not an object, it assigns the value to the result object using the new key.
+Return Result:
+
+The function returns the flattened object.
