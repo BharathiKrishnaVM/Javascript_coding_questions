@@ -618,3 +618,126 @@ Insertion Sort: Efficient for small or nearly sorted arrays.
 Merge Sort: Efficient and stable, with a time complexity of O(n log n).
 Quick Sort: Efficient and widely used, with an average time complexity of O(n log n).
 Understanding these sorting algorithms and their implementations can help you choose the right one for your specific use case and improve your problem-solving skills in JavaScript.
+
+# Deep copy and Shallow copy:
+In JavaScript, copying objects can be done in two ways: shallow copy and deep copy. Understanding the difference between these two types of copies is crucial for managing object references and avoiding unintended side effects.
+
+Shallow Copy
+A shallow copy of an object is a copy where only the top-level properties are copied. If the object contains nested objects, the nested objects are not copied; instead, references to the nested objects are copied. This means that changes to the nested objects in the copied object will affect the original object and vice versa.
+
+Example of Shallow Copy
+Using Object.assign():
+```javascript
+const original = {
+  name: 'John',
+  address: {
+    city: 'New York',
+    zip: 10001
+  }
+};
+
+const shallowCopy = Object.assign({}, original);
+
+console.log(shallowCopy); // Output: { name: 'John', address: { city: 'New York', zip: 10001 } }
+
+// Modifying the nested object in the shallow copy
+shallowCopy.address.city = 'San Francisco';
+
+console.log(original.address.city); // Output: 'San Francisco' (original object is affected)
+```
+Using the Spread Operator:
+```javascript
+const original = {
+  name: 'John',
+  address: {
+    city: 'New York',
+    zip: 10001
+  }
+};
+
+const shallowCopy = { ...original };
+
+console.log(shallowCopy); // Output: { name: 'John', address: { city: 'New York', zip: 10001 } }
+
+// Modifying the nested object in the shallow copy
+shallowCopy.address.city = 'San Francisco';
+
+console.log(original.address.city); // Output: 'San Francisco' (original object is affected)
+```
+Deep Copy
+A deep copy of an object is a copy where all levels of the object are copied, including nested objects. This means that changes to the nested objects in the copied object will not affect the original object and vice versa.
+
+Example of Deep Copy
+Using JSON Methods:
+```javascript
+const original = {
+  name: 'John',
+  address: {
+    city: 'New York',
+    zip: 10001
+  }
+};
+
+const deepCopy = JSON.parse(JSON.stringify(original));
+
+console.log(deepCopy); // Output: { name: 'John', address: { city: 'New York', zip: 10001 } }
+
+// Modifying the nested object in the deep copy
+deepCopy.address.city = 'San Francisco';
+
+console.log(original.address.city); // Output: 'New York' (original object is not affected)
+```
+Using a Recursive Function:
+```javascript
+function deepCopy(obj) {
+  if (obj === null || typeof obj !== 'object') {
+    return obj;
+  }
+
+  if (Array.isArray(obj)) {
+    const arrCopy = [];
+    for (let i = 0; i < obj.length; i++) {
+      arrCopy[i] = deepCopy(obj[i]);
+    }
+    return arrCopy;
+  }
+
+  const objCopy = {};
+  for (let key in obj) {
+    if (obj.hasOwnProperty(key)) {
+      objCopy[key] = deepCopy(obj[key]);
+    }
+  }
+  return objCopy;
+}
+
+const original = {
+  name: 'John',
+  address: {
+    city: 'New York',
+    zip: 10001
+  }
+};
+
+const deepCopyObj = deepCopy(original);
+
+console.log(deepCopyObj); // Output: { name: 'John', address: { city: 'New York', zip: 10001 } }
+
+// Modifying the nested object in the deep copy
+deepCopyObj.address.city = 'San Francisco';
+
+console.log(original.address.city); // Output: 'New York' (original object is not affected)
+```
+
+Summary
+Shallow Copy:
+
+Copies only the top-level properties.
+Nested objects are not copied; references to the nested objects are copied.
+Changes to nested objects in the copied object affect the original object.
+Methods: Object.assign(), spread operator (...).
+Deep Copy:
+
+Copies all levels of the object, including nested objects.
+Changes to nested objects in the copied object do not affect the original object.
+Methods: JSON methods (JSON.parse(JSON.stringify(obj))), recursive function.
